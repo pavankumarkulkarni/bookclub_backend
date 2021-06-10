@@ -13,31 +13,8 @@ app.route("/about").get((req, res) => {
 // graphqL Start
 
 const { ApolloServer } = require("apollo-server-express");
-
-const mockdata = [
-  { id: "1", title: "title 1", author: "author 1" },
-  { id: "2", title: "title 2", author: "author 2" },
-];
-
-const typeDefs = `
-type  Query{
-  greet: String,
-  getBooks: [Book]
-}
-
-type Book{
-  id:String,
-  title:String,
-  author:String
-}
-
-`;
-const resolvers = {
-  Query: {
-    greet: () => "Hello from GraphQL",
-    getBooks: () => mockdata,
-  },
-};
+const typeDefs = require("./graphQL/typeDefs");
+const resolvers = require("./graphQL/resolvers");
 
 const server = new ApolloServer({
   typeDefs,
