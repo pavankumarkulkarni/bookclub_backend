@@ -1,19 +1,5 @@
-const typeDefs = `
-type  Query{
-  books:[Book]
-  book(id:ID!):Book
-}
+const bookTypeDefs = require("./bookTypeDefs");
+const authorTypeDefs = require("./authorTypeDefs");
+const userTypeDefs = require("./userTypeDefs");
 
-type Book{
-  id:ID!
-  image:String!
-  title:String!
-  author:String!
-  genre:String!
-  rating:Float
-  description:String!
-}
-
-`;
-
-module.exports = typeDefs;
+module.exports = [bookTypeDefs, authorTypeDefs, userTypeDefs];
