@@ -28,6 +28,21 @@ const resolvers = {
       return bookReturn;
     },
   },
+
+  Mutation: {
+    register: async (_, { input }, { userCollection }) => {
+      try {
+        const newUser = new userCollection({
+          email: input.email,
+          password: input.password,
+        });
+        await newUser.save();
+        return true;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+  },
 };
 
 module.exports = resolvers;
