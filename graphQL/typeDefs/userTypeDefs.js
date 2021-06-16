@@ -7,7 +7,7 @@ type Mutation{
 input RegistrationInput{
   email:String!
   password:String!
-  confirmPassowrd:String!
+  confirmPassword:String!
 }
 
 input LoginInput{
