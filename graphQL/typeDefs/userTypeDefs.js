@@ -1,7 +1,8 @@
 const userTypeDefs = `
 type Mutation{
   register(input: RegistrationInput!): Boolean,
-  login(input: LoginInput!):String 
+  login(input: LoginInput!):String,
+  updateDisplayName(input: displayNameInput!): User! 
 }
 
 input RegistrationInput{
@@ -15,10 +16,13 @@ input LoginInput{
   password:String!
 }
 
+input displayNameInput{
+  name:String!
+}
+
 type User{
   id:ID!
   email:String!
-  password:String!
   name:String
   avatar:String
   booksOwned:[BookOwned]
