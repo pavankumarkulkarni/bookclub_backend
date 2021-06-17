@@ -15,6 +15,7 @@ const userResolvers = {
         const newUser = new userCollection({
           email: input.email,
           password: passwordHash,
+          name: input.email,
         });
         await newUser.save();
         return true;
@@ -43,6 +44,21 @@ const userResolvers = {
           { expiresIn: "1d" }
         );
         return token;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    updateDisplayName: async (_, { input }, { userCollection, me }) => {
+      try {
+        if (!me) {
+          throw new Error("Login to update display Name");
+        }
+        const updatedUser = await userCollection.findOneAndUpdate(
+          { _id: me.id },
+          { $set: { name: input.name } },
+          { new: true }
+        );
+        return updatedUser;
       } catch (err) {
         throw new Error(err);
       }

@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const userCollection = require("./mongodb/models");
+const jwt = require("jsonwebtoken");
 
 // file upload functionality
 app.route("/").get((req, res) => {
@@ -14,6 +15,14 @@ app.route("/about").get((req, res) => {
 
 // graphqL Start
 
+function getCurrentUser(req) {
+  const token = req.headers["xauthtoken"];
+  if (token) {
+    const currentUser = jwt.verify(token, process.env.JWT_SECRET);
+    return currentUser;
+  }
+}
+
 const { ApolloServer } = require("apollo-server-express");
 const typeDefs = require("./graphQL/typeDefs");
 const resolvers = require("./graphQL/resolvers");
@@ -21,9 +30,10 @@ const resolvers = require("./graphQL/resolvers");
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: {
+  context: ({ req }) => ({
     userCollection,
-  },
+    me: getCurrentUser(req),
+  }),
 });
 
 server.applyMiddleware({ app });
