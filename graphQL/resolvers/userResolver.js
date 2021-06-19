@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const bcCache = require("../../util/cache");
 const userResolvers = {
   Mutation: {
     register: async (_, { input }, { userCollection }) => {
@@ -50,6 +51,7 @@ const userResolvers = {
     },
     updateDisplayName: async (_, { input }, { userCollection, me }) => {
       try {
+        console.log(me);
         if (!me) {
           throw new Error("Login to update display Name");
         }
@@ -62,6 +64,20 @@ const userResolvers = {
       } catch (err) {
         throw new Error(err);
       }
+    },
+    logout: (_, __, { me }) => {
+      if (!me) {
+        throw new Error("Something went wrong!");
+      }
+      const success = bcCache.set(
+        me.token,
+        me.iat,
+        me.exp - Math.ceil(new Date().getTime() / 1000)
+      );
+      if (!success) {
+        throw new Error("Error in caching!");
+      }
+      return true;
     },
   },
 };

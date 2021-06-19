@@ -1,8 +1,9 @@
 const userTypeDefs = `
-type Mutation{
+extend type Mutation{
   register(input: RegistrationInput!): Boolean,
   login(input: LoginInput!):String,
-  updateDisplayName(input: displayNameInput!): User! 
+  updateDisplayName(input: displayNameInput!): User!,
+  logout:Boolean 
 }
 
 input RegistrationInput{
