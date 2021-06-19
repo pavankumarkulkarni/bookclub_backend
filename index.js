@@ -1,8 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const userCollection = require("./mongodb/models");
+const {
+  userCollection,
+  authorCollection,
+  bookCollection,
+} = require("./mongodb/models");
 const jwt = require("jsonwebtoken");
+const bcCache = require("./util/cache");
 
 // file upload functionality
 app.route("/").get((req, res) => {
@@ -18,8 +23,12 @@ app.route("/about").get((req, res) => {
 function getCurrentUser(req) {
   const token = req.headers["xauthtoken"];
   if (token) {
-    const currentUser = jwt.verify(token, process.env.JWT_SECRET);
-    return currentUser;
+    const value = bcCache.get(token);
+    if (!value) {
+      const currentUser = jwt.verify(token, process.env.JWT_SECRET);
+      return { ...currentUser, token };
+    }
+    return null;
   }
 }
 
@@ -32,6 +41,8 @@ const server = new ApolloServer({
   resolvers,
   context: ({ req }) => ({
     userCollection,
+    authorCollection,
+    bookCollection,
     me: getCurrentUser(req),
   }),
 });

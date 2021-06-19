@@ -5,6 +5,18 @@ type  Query{
   booksByAuthor(authorID:ID!):[Book]
 }
 
+type Mutation{
+  createBook(input:bookInput!) : Book
+}
+
+input bookInput{
+  image:String!
+  title:String!
+  authorID:String!
+  genre:String!
+  description:String!
+}
+
 type Book{
   id:ID!
   image:String!
@@ -15,6 +27,7 @@ type Book{
   description:String!
   reviews: [Review]
 }
+
 
 type Review{
   reviewComment:String!
