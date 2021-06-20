@@ -79,6 +79,30 @@ const userResolvers = {
       }
       return true;
     },
+    addBookCopy: async (
+      _,
+      { input },
+      { userCollection, bookCollection, me }
+    ) => {
+      try {
+        if (!me) {
+          throw new Error("Login to add a book copy!");
+        }
+        const { bookId } = input;
+        const bookInDb = await bookCollection.findById(bookId);
+        if (!bookInDb) {
+          throw new Error("Book not found!");
+        }
+        const updatedUser = await userCollection.findOneAndUpdate(
+          { _id: me.id },
+          { $push: { booksOwned: { bookID: bookId, available: true } } },
+          { new: true }
+        );
+        return updatedUser;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
 };
 

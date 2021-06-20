@@ -19,7 +19,7 @@ const bookModel = new mongoose.Schema({
   genre: String,
   rating: Number,
   description: String,
-  reviews: [],
+  reviews: [{ userID: String, comment: String, rating: Number }],
 });
 
 const userCollection = mongoose.model("userCollection", userModel);

@@ -6,8 +6,17 @@ type  Query{
 }
 
 type Mutation{
-  createBook(input:bookInput!) : Book
+  createBook(input:bookInput!) : Book,
+  reviewBook(input: reviewBookInput!):Book
 }
+
+input reviewBookInput{
+  bookID:String,
+  comment:String,
+  rating:Int
+}
+
+
 
 input bookInput{
   image:String!

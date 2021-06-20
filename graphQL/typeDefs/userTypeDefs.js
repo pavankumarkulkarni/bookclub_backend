@@ -3,7 +3,12 @@ extend type Mutation{
   register(input: RegistrationInput!): Boolean,
   login(input: LoginInput!):String,
   updateDisplayName(input: displayNameInput!): User!,
-  logout:Boolean 
+  logout:Boolean,
+  addBookCopy(input:bookCopyInput):User! 
+}
+
+input bookCopyInput{
+  bookId:String
 }
 
 input RegistrationInput{
