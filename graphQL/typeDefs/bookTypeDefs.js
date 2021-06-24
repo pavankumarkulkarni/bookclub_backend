@@ -34,9 +34,14 @@ type Book{
   genre:String!
   rating:Float
   description:String!
-  reviews: [Review]
+  reviews(pageNum:Int,pageSize:Int): Reviews
 }
 
+type Reviews {
+  hasNext:Boolean,
+  hasPrev:Boolean,
+  reviews:[Review]
+}
 
 type Review{
   reviewComment:String!

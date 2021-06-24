@@ -103,6 +103,61 @@ const userResolvers = {
         throw new Error(err);
       }
     },
+    borrowABook: async (_, { input }, { userCollection, me }) => {
+      try {
+        if (!me) {
+          throw new Error("Login to borrow a book!");
+        }
+        const { ownerID, bookID } = input;
+        const updatedOwner = await userCollection.findOneAndUpdate(
+          { _id: ownerID, "booksOwned.bookID": bookID },
+          { $set: { "booksOwned.$.available": false } },
+          { new: true }
+        );
+        if (!updatedOwner) {
+          throw new Error("Something went wrong in borrowing book!");
+        }
+        const updatedUser = await userCollection.findOneAndUpdate(
+          { _id: me.id },
+          { $push: { booksBorrowed: { bookID: bookID, ownerID: ownerID } } },
+          { new: true }
+        );
+        if (!updatedUser) {
+          throw new Error("Something went wrong");
+        }
+        return updatedUser;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    returnABook: async (_, { input }, { userCollection, me }) => {
+      try {
+        if (!me) {
+          throw new Error("Login to borrow a book!");
+        }
+        const { ownerID, bookID } = input;
+        const updatedOwner = await userCollection.findOneAndUpdate(
+          { _id: ownerID, "booksOwned.bookID": bookID },
+          { $set: { "booksOwned.$.available": true } },
+          { new: true }
+        );
+        if (!updatedOwner) {
+          throw new Error("Something went wrong in borrowing book!");
+        }
+
+        const updatedUser = await userCollection.findOneAndUpdate(
+          { _id: me.id },
+          { $pull: { booksBorrowed: { bookID: bookID, ownerID, ownerID } } },
+          { new: true }
+        );
+        if (!updatedUser) {
+          throw new Error("Something went wrong");
+        }
+        return updatedUser;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
 };
 
