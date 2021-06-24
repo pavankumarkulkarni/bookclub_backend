@@ -4,7 +4,19 @@ extend type Mutation{
   login(input: LoginInput!):String,
   updateDisplayName(input: displayNameInput!): User!,
   logout:Boolean,
-  addBookCopy(input:bookCopyInput):User! 
+  addBookCopy(input:bookCopyInput):User!,
+  borrowABook(input: borrowBookInput!):User!,
+  returnABook(input: returnBookInput!):User! 
+}
+
+input borrowBookInput{
+  ownerID:String!,
+  bookID:String!
+}
+
+input returnBookInput{
+  ownerID:String!,
+  bookID:String!
 }
 
 input bookCopyInput{

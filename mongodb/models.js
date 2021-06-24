@@ -4,7 +4,7 @@ const userModel = new mongoose.Schema({
   password: String,
   name: String,
   booksOwned: [{ bookID: String, available: Boolean }],
-  booksRented: [String],
+  booksBorrowed: [{ bookID: String, ownerID: String }],
 });
 
 const authorModel = new mongoose.Schema({
